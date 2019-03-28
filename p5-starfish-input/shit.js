@@ -7,27 +7,30 @@ function setup() {
   strokeWeight(5);
   // strokeFill(0);
   legSlider = createSlider(5, 8, 5);
-  legSlider.position(340, 35);
+  legSlider.position(900, 260);
   shapeSlider = createSlider(30, 100, 50);
-  shapeSlider.position(340, 65);
+  shapeSlider.position(900, 290);
   lengthSlider = createSlider(100, 250, 150);
-  lengthSlider.position(340, 95);
+	lengthSlider.position(900, 320);
+	
   rSlider = createSlider(0, 255, 100);
-  rSlider.position(130, 35);
+  rSlider.position(130, 260);
   gSlider = createSlider(0, 255, 100);
-  gSlider.position(130, 65);
+  gSlider.position(130, 290);
   bSlider = createSlider(0, 255, 100);
-  bSlider.position(130, 95);
+  bSlider.position(130, 320);
   searchInput = createInput();
-  searchInput.position(125, 150);
+	searchInput.position(125, 400);
+	createP('Starfish Colour').position(130,210);
+	createP('Search for Texture').position(130,350);
+	createP('Physical Attributes').position(900, 210);
+
+
 }
 
 function draw (){
   background(225)
   textSize(20);
-  text('Phyiscal Attributes', 325, 30);
-  text('Starfish Colour', 130, 30);
-  text('Search for Texture', 120, 140);
   const r = rSlider.value();
   const b = gSlider.value();
   const g = bSlider.value();
