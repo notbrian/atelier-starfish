@@ -1,9 +1,14 @@
 var legSlider, shapeSlider, lengthSlider, rSlider, gSlider, bSlider
 
 let starfish = {}
+let img;
 
+
+function preload() {
+	img = loadImage('meme.png');
+}
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+	createCanvas(windowWidth, windowHeight, WEBGL);
   strokeWeight(5);
   // strokeFill(0);
   legSlider = createSlider(5, 8, 5);
@@ -29,16 +34,16 @@ function setup() {
 }
 
 function draw (){
-  background(225)
+	// background(225)
   textSize(20);
   const r = rSlider.value();
   const b = gSlider.value();
   const g = bSlider.value();
-
-    fill(r, g, b);
+	// noStroke()
+	fill(r, g, b);
 
 	//reposition 0,0 to the center of the canvas
-	translate(width / 2, height / 2);
+	// translate(width / 2, height / 2);
 
 
 		// var fr = 2*(frameCount /100);
@@ -54,12 +59,16 @@ function draw (){
 	// }
 	
 	//     function         speed  distance
-	rotate(1.2+cos(frameCount*0.08)*0.08)
-	scale(1+cos(frameCount*0.05)*0.05)
+	// rotate(1.2+cos(frameCount*0.08)*0.08)
+	// scale(1+cos(frameCount*0.05)*0.05)
 
 //  star(x, y, inner vertex, outer vertex, no of legs)
-	star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
+	ambientLight(255)
 
+	// fill(0,0,0,255)
+	textureMode(NORMAL)
+	texture(img);
+	star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
 
 	starfish = {
 		color: [rSlider.value(), gSlider.value(), bSlider.value()],
@@ -68,20 +77,42 @@ function draw (){
 		numLegs: legSlider.value(),
 		texture: searchInput.value()
 	}
+
+	// for (let i = 0; i < 5; i++) {
+	// 	for(let h = 0; h < 3; h++) {
+	// 		// image(img, -200 + (60 * i), -100 + (60 * h), 50, 50)
+	// 	}
+	// }
+
+	// fill(0,0,0,0)
+	// star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
+
 }
 
 function star(x, y, radius1, radius2, npoints) {
 	let angle = TWO_PI / npoints;
 	let halfAngle = angle / 2.0;
 	beginShape();
-
 	for (let a = 1; a < TWO_PI; a += angle) {
-	  let sx = x + cos(a) * radius2;
-	  let sy = y + sin(a) * radius2;
-	  vertex(sx, sy);   //Inner vertex
-	  sx = x + cos(a + halfAngle) * radius1;
-	  sy = y + sin(a + halfAngle) * radius1;
-	  vertex(sx, sy); //outer vertex
+
+	  let sx = x + cos(a) * radius1;
+	  let sy = y + sin(a) * radius1;
+	  vertex(sx, sy, 0);   //Inner vertex
+	  sx = x + cos(a + halfAngle) * radius2;
+		sy = y + sin(a + halfAngle) * radius2;
+		vertex(sx, sy, 0); //outer vertex
 	}
+
+
 	endShape(CLOSE);
+	pop()
+	rotate(mouseX/20)
+	beginShape()
+	vertex(0,0,0,0);
+	vertex(200,0,0,1);
+	vertex(200,200,1,1);
+	vertex(0,200,1,0);
+	endShape();
+	push()
+	
 }
