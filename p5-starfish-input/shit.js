@@ -2,11 +2,13 @@ var legSlider, shapeSlider, lengthSlider, rSlider, gSlider, bSlider
 
 let starfish = {}
 let img;
-
+let images = [];
+let ready = false;
 
 function preload() {
 	img = loadImage('meme.png');
 }
+
 function setup() {
 	createCanvas(windowWidth, windowHeight, WEBGL);
   strokeWeight(5);
@@ -26,15 +28,22 @@ function setup() {
   bSlider.position(130, 320);
   searchInput = createInput();
 	searchInput.position(125, 400);
+	searchInput.input(searchHandler)
+
 	createP('Starfish Colour').position(130,210);
 	createP('Search for Texture').position(130,350);
 	createP('Physical Attributes').position(900, 210);
 
-
+	
 }
 
 function draw (){
-	// background(225)
+
+	if(ready) {
+		img = loadImage("https://cors-anywhere.herokuapp.com/" + images[0]);
+		ready = false;
+  }
+	background(225)
   textSize(20);
   const r = rSlider.value();
   const b = gSlider.value();
@@ -44,7 +53,6 @@ function draw (){
 
 	//reposition 0,0 to the center of the canvas
 	// translate(width / 2, height / 2);
-
 
 		// var fr = 2*(frameCount /100);
 
@@ -69,7 +77,6 @@ function draw (){
 	textureMode(NORMAL)
 	texture(img);
 	star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
-
 	starfish = {
 		color: [rSlider.value(), gSlider.value(), bSlider.value()],
 		shape: shapeSlider.value(),
@@ -97,22 +104,44 @@ function star(x, y, radius1, radius2, npoints) {
 
 	  let sx = x + cos(a) * radius1;
 	  let sy = y + sin(a) * radius1;
-	  vertex(sx, sy, 0);   //Inner vertex
+	  vertex(sx, sy, 0 + (0.5/(angle/a)),1);   //Inner vertex
 	  sx = x + cos(a + halfAngle) * radius2;
 		sy = y + sin(a + halfAngle) * radius2;
-		vertex(sx, sy, 0); //outer vertex
+		vertex(sx, sy); //outer vertex
 	}
 
 
 	endShape(CLOSE);
-	pop()
-	rotate(mouseX/20)
-	beginShape()
-	vertex(0,0,0,0);
-	vertex(200,0,0,1);
-	vertex(200,200,1,1);
-	vertex(0,200,1,0);
-	endShape();
-	push()
 	
+}
+
+function requestImage(search = "hot dog") {
+	let url = 'https://www.googleapis.com/customsearch/v1?q=' + search + "&fileType=jpg,png&cx=005973051980809555555%3Azmae5bkt_wu&imgType=clipart&num=4&safe=active&searchType=image&key=AIzaSyDT4P_KnUkdDl1M26qpUZt27-E50-xpJr8";
+	httpDo(
+		url,
+		{
+			method: 'GET',
+		},
+		function(res) {
+			response = JSON.parse(res)
+			console.log(response)
+			for (let i = 0; i < 4; i++) {
+				images[i] = response.items[i].link
+			}
+			
+			ready = true;
+		}
+	);
+
+}
+
+function searchHandler() {
+  console.log(this.value())
+}
+
+function keyPressed() {
+  if(key === "Enter") {
+    requestImage(searchInput.value())
+    searchInput.value("")
+  }
 }
