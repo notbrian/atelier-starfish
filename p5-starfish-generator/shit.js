@@ -1,9 +1,24 @@
-var legSlider, shapeSlider, lengthSlider, rSlider, gSlider, bSlider
+var legSlider, shapeSlider, lengthSlider, rSlider, gSlider, bSlider, button
 
 let starfish = {}
 let img;
-let images = [];
+let images = ["blank"];
 let ready = false;
+let lastSearch = ""
+
+
+// Initialize Firebase
+var config = {
+	apiKey: "AIzaSyDkqNkD2L82vlNs9YdaMELDRamHNKjK6d0",
+	authDomain: "starfish-1553611377495.firebaseapp.com",
+	projectId: "starfish-1553611377495",
+};
+
+firebase.initializeApp(config);
+
+var db = firebase.firestore();
+
+
 
 function preload() {
 	img = loadImage('meme.png');
@@ -19,6 +34,9 @@ function setup() {
   shapeSlider.position(900, 290);
   lengthSlider = createSlider(150, 250, 150);
 	lengthSlider.position(900, 320);
+	button = createButton('Send to Aquarium');
+  button.position(900, 350);
+  button.mousePressed(upload);
 	
   rSlider = createSlider(0, 255, 100);
   rSlider.position(130, 260);
@@ -29,6 +47,7 @@ function setup() {
   searchInput = createInput();
 	searchInput.position(125, 400);
 	searchInput.input(searchHandler)
+
 
 	createP('Starfish Colour').position(130,210);
 	createP('Search for Texture').position(130,350);
@@ -66,15 +85,17 @@ function draw (){
 	textureMode(NORMAL)
 	fill(255)
 	texture(img);
-	
+	// box(width,height,0)
 	star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
+	
 
 	starfish = {
-		color: [rSlider.value(), gSlider.value(), bSlider.value()],
+		searchTerm: lastSearch,
+		numLegs: legSlider.value(),
 		shape: shapeSlider.value(),
 		length: lengthSlider.value(),
-		numLegs: legSlider.value(),
-		textureLink: images[0]
+		color: [rSlider.value(), gSlider.value(), bSlider.value()],
+		textureLink: images[0],
 	}
 
 
@@ -89,10 +110,10 @@ function star(x, y, radius1, radius2, npoints) {
 
 	  let sx = x + cos(a) * radius1;
 	  let sy = y + sin(a) * radius1;
-	  vertex(sx, sy, 0 + (0.5/(angle/a)), 1);   //Inner vertex
+	  vertex(sx, sy, 0, 0 + (0.5/(angle/a)), 1);   //Inner vertex
 	  sx = x + cos(a + halfAngle) * radius2;
 		sy = y + sin(a + halfAngle) * radius2;
-		vertex(sx, sy); //outer vertex
+		vertex(sx, sy, 0); //outer vertex
 	}
 
 
@@ -126,7 +147,19 @@ function searchHandler() {
 
 function keyPressed() {
   if(key === "Enter") {
-    requestImage(searchInput.value())
+		requestImage(searchInput.value())
+		lastSearch = searchInput.value()
     searchInput.value("")
   }
+}
+
+
+function upload() {
+	db.collection("starfish").add(starfish)
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
 }
