@@ -48,36 +48,40 @@ function draw() {
 	for (let i = 0; i < aquarium.length; i++) {
 		push()
 		scale(0.5)
-		translate(-width/2,0)
 
 		if(aquarium[i].image === undefined) {
 			texture(bgImg)
 		} else {
 			texture(aquarium[i].image);
 		}
-
-		star(200 * i, 200, aquarium[i].shape, aquarium[i].length, aquarium[i].numLegs);
+		aquarium[i].move()
+		aquarium[i].draw()
 
 		pop()
 	}
 
+	// star(0, 0, 400, 400, 6);
+
+
 }
 
-function star(x, y, radius1, radius2, npoints) {
+function star(x, y, radius1, radius2, npoints, seed) {
 	let angle = TWO_PI / npoints;
 	let halfAngle = angle / 2.0;
+
 
 	beginShape();
 	for (let a = 1; a < TWO_PI + angle * 2; a += angle) {
 
-		let sx = x + cos(a) * radius1;
-		let sy = y + sin(a) * radius1;
+		let sx = (x + cos(a) * radius1) * ((noise(seed + frameCount*0.005)));
+		let sy = (y + sin(a) * radius1) * ((noise(seed + frameCount*0.005)));
+		// let sx = (x + cos(a) * radius1);
+		// let sy = (y + sin(a) * radius1);
 		vertex(sx, sy, 0, 0 + (0.5 / (angle / a)), 1); //Inner vertex
-		sx = x + cos(a + halfAngle) * radius2;
+	  sx = x + cos(a + halfAngle) * radius2;
 		sy = y + sin(a + halfAngle) * radius2;
 		vertex(sx, sy, 0); //outer vertex
 	}
-
 
 	endShape(CLOSE);
 
@@ -90,9 +94,6 @@ function loadStarfish(params) {
 			aquarium.push(doc.data())
 		});
 
-
-
-		
 	aquarium.forEach((starfish) => {
 		console.log("test")
 		if (starfish.textureLink == "blank") {
@@ -115,18 +116,48 @@ class Starfish {
 		this.searchTerm = data.searchTerm
 		this.shape = data.shape
 		this.textureLink = data.textureLink
-
+		this.seed = data.seed
+		this.x = random(200,-200);
+		this.y = random(200,-200);
 	}
 
-  draw(offset) {
-		star(200 * offset, 200, this.shape, this.length, this.numLegs);
+  draw() {
+		translate(this.x, this.y)
+		star(0, 0, this.shape, this.length, this.numLegs, this.seed);
+	}
+
+	move() {
+		this.x += random(10, -10) * 0.3
+		this.y += random(10, -10) * 0.3
 	}
 	
 	loadImage() {
 		if (this.textureLink == "blank") {
 			return
 		}
-		this.image = loadImage("https://cors-anywhere.herokuapp.com/" + this.textureLink)
+		this.image = loadImage("https://cors-anywhere.herokuapp.com/" + this.textureLink, (img) => {
+			console.log("Loaded!")
+			img.loadPixels()
+			for (let x = 0; x < img.width; x++) {
+				for (let y = 0; y < img.height; y++) {
+
+					let loc = (x + y * img.width) * 4;
+					let r, g, b;
+					r = img.pixels[loc];
+					g = img.pixels[loc+1]
+					b = img.pixels[loc+2]
+
+					img.pixels[loc] = r + this.color[0]
+					img.pixels[loc+1] = g + this.color[1]
+					img.pixels[loc+2] = b + this.color[2]
+					// pixel = [pixel[0] + this.color[0], pixel[1] + this.color[1], pixel[2] + this.color[2]]
+					// pixel = [0,0,0,0]
+					// img.pixels[x,y] = pixel
+ 				}
+			}
+			img.updatePixels();
+
+		})
 	}
 
 }
