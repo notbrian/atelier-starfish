@@ -68,7 +68,6 @@ function draw (){
   const b = gSlider.value();
   const g = bSlider.value();
 	// noStroke()
-	fill(r, g, b);
 
 	//reposition 0,0 to the center of the canvas
 	// translate(width / 2, height / 2);
@@ -79,16 +78,15 @@ function draw (){
 	scale(1+cos(frameCount*0.05)*0.05)
 
 //  star(x, y, inner vertex, outer vertex, no of legs)
-	// ambientLight(rSlider.value(), gSlider.value(), bSlider.value())
 	ambientLight(255)
-
 	textureMode(NORMAL)
 	fill(255)
 	texture(img);
-	// box(width,height,0)
+	tint(0)
 	star(0, 0, shapeSlider.value(), lengthSlider.value(), legSlider.value());
 	
 
+	
 	starfish = {
 		searchTerm: lastSearch,
 		numLegs: legSlider.value(),
@@ -96,6 +94,7 @@ function draw (){
 		length: lengthSlider.value(),
 		color: [rSlider.value(), gSlider.value(), bSlider.value()],
 		textureLink: images[0],
+		seed: random(-999, 999)
 	}
 
 
@@ -108,9 +107,9 @@ function star(x, y, radius1, radius2, npoints) {
 	beginShape();
 	for (let a = 1; a < TWO_PI + angle * 2; a += angle) {
 
-	  let sx = x + cos(a) * radius1;
-	  let sy = y + sin(a) * radius1;
-	  vertex(sx, sy, 0, 0 + (0.5/(angle/a)), 1);   //Inner vertex
+		let sx = (x + cos(a) * radius1) * ((noise(frameCount*0.01)));
+		let sy = (y + sin(a) * radius1) * ((noise(frameCount*0.01)));
+		vertex(sx, sy, 0, 0 + (0.5 / (angle / a)), 1); //Inner vertex
 	  sx = x + cos(a + halfAngle) * radius2;
 		sy = y + sin(a + halfAngle) * radius2;
 		vertex(sx, sy, 0); //outer vertex
@@ -122,7 +121,10 @@ function star(x, y, radius1, radius2, npoints) {
 }
 
 function requestImage(search = "hot dog") {
-	let url = 'https://www.googleapis.com/customsearch/v1?q=' + search + "&fileType=jpg,png&cx=005973051980809555555%3Azmae5bkt_wu&imgType=clipart&num=4&safe=active&searchType=image&key=AIzaSyDT4P_KnUkdDl1M26qpUZt27-E50-xpJr8";
+	// let url = 'https://www.googleapis.com/customsearch/v1?q=' + search + "&fileType=jpg,png&cx=005973051980809555555%3Azmae5bkt_wu&imgType=clipart&num=4&safe=active&searchType=image&key=AIzaSyDT4P_KnUkdDl1M26qpUZt27-E50-xpJr8";
+	// let url = 'https://www.googleapis.com/customsearch/v1?q=' + search + "&fileType=jpg,png&cx=005973051980809555555%3Azmae5bkt_wu&num=4&searchType=image&key=AIzaSyDT4P_KnUkdDl1M26qpUZt27-E50-xpJr8";
+	let url = 'https://www.googleapis.com/customsearch/v1?q=' + search + "&fileType=jpg,png&cx=005973051980809555555%3Azmae5bkt_wu&num=4&safe=active&searchType=image&key=AIzaSyDT4P_KnUkdDl1M26qpUZt27-E50-xpJr8";
+
 	httpDo(
 		url,
 		{
