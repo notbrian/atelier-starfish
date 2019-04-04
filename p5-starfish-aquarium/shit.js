@@ -1,7 +1,5 @@
-let img;
-let starfish = []
-// let images = [];
-let ready = false;
+let bgImg;
+let aquarium = []
 
 // Initialize Firebase
 var config = {
@@ -14,51 +12,54 @@ firebase.initializeApp(config);
 
 var db = firebase.firestore();
 
+
 function preload() {
-	img = loadImage('Starfish Background.png');
+	bgImg = loadImage('Starfish Background.png');
 
 }
 
 function setup() {
 	createCanvas(windowWidth, windowHeight, WEBGL);
-	strokeWeight(5);
-
+	
+	// loadStarfish()
 
 	db.collection("starfish")
-    .onSnapshot(function() {
-		loadStarfish()
-    });
+    .onSnapshot((snapshot) =>{
+				let changes = snapshot.docChanges();
+				changes.forEach(change => {
+					data = change.doc.data()
+					console.log("TCL: setup -> data", data)
+					let newStarfish = new Starfish(data)
+					newStarfish.loadImage()
+					aquarium.push(newStarfish)
+				})
+		})
 
 }
 
 function draw() {
-
 	background(225)
 	textSize(20);
-
 	textureMode(NORMAL)
 	fill(255)
-	texture(img);
+	texture(bgImg);
 	plane(width, height, 50, 50);
 
-	for (let i = 0; i < starfish.length; i++) {
+	for (let i = 0; i < aquarium.length; i++) {
 		push()
-		// rotate(1.2+cos(frameCount*0.08)*0.08)
-		// scale(1+cos(frameCount*0.05)*0.05)
-		if(starfish[i].image === undefined) {
-			texture(img)
+		scale(0.5)
+		translate(-width/2,0)
+
+		if(aquarium[i].image === undefined) {
+			texture(bgImg)
 		} else {
-			texture(starfish[i].image);
+			texture(aquarium[i].image);
 		}
-		star(0 + (200 * i), 0, starfish[i].shape, starfish[i].length, starfish[i].numLegs);
+
+		star(200 * i, 200, aquarium[i].shape, aquarium[i].length, aquarium[i].numLegs);
 
 		pop()
 	}
-
-	// star(0, 0, 50, 150, 15);
-
-
-
 
 }
 
@@ -86,13 +87,13 @@ function loadStarfish(params) {
 	db.collection("starfish").get().then((querySnapshot) => {
 		querySnapshot.forEach((doc) => {
 			console.log(`${doc.id} => ${doc.data()}`);
-			starfish.push(doc.data())
+			aquarium.push(doc.data())
 		});
 
 
 
 		
-	starfish.forEach((starfish) => {
+	aquarium.forEach((starfish) => {
 		console.log("test")
 		if (starfish.textureLink == "blank") {
 			return
@@ -103,19 +104,29 @@ function loadStarfish(params) {
 
 	});
 
+}
+
+class Starfish {
+
+  constructor(data) {
+		this.color = data.color
+		this.length = data.length
+		this.numLegs = data.numLegs
+		this.searchTerm = data.searchTerm
+		this.shape = data.shape
+		this.textureLink = data.textureLink
+
+	}
+
+  draw(offset) {
+		star(200 * offset, 200, this.shape, this.length, this.numLegs);
+	}
 	
+	loadImage() {
+		if (this.textureLink == "blank") {
+			return
+		}
+		this.image = loadImage("https://cors-anywhere.herokuapp.com/" + this.textureLink)
+	}
 
-
-
-	// starfish.forEach((starfish) => {
-	// 	console.log("test")
-	// 	if (starfish.textureLink == "blank") {
-	// 		return
-	// 	}
-	// 	console.log(starfish)
-	// 	starfish.image = loadImage("https://cors-anywhere.herokuapp.com/" + starfish.textureLink)
-	// })
-
-
-	// ready = true;
 }
