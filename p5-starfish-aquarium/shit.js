@@ -119,10 +119,10 @@ class Starfish {
 		this.seed = data.seed
 		this.xpos= random(200,-200);
 		this.ypos = random(200,-200);
-		this.xspeed = 2.8; // Speed of the shape
-		this.yspeed = 2.2; // Speed of the shape
-		this.xdirection = 1; // Left or Right
-		this.ydirection = 1; // Top to Bottom
+		this.xspeed = random(0,1); // Speed of the shape
+		this.yspeed = random(0,1); // Speed of the shape
+		this.xdirection = random(0,1); // Left or Right
+		this.ydirection = random(0,1); // Top to Bottom
 		this.rad = (this.length + this.shape);
 	}
 
@@ -137,10 +137,10 @@ class Starfish {
 	
 		// Test to see if the shape exceeds the boundaries of the screen
 		// If it does, reverse its direction by multiplying by -1
-		if (this.xpos > width - this.rad || this.xpos < this.rad) {
+		if (this.xpos > width || this.xpos < -width) {
 			this.xdirection *= -1;
 		}
-		if (this.ypos > height - this.rad || this.ypos < this.rad) {
+		if (this.ypos > height || this.ypos < -height) {
 			this.ydirection *= -1;
 		}
 	}
