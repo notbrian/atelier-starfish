@@ -117,18 +117,32 @@ class Starfish {
 		this.shape = data.shape
 		this.textureLink = data.textureLink
 		this.seed = data.seed
-		this.x = random(200,-200);
-		this.y = random(200,-200);
+		this.xpos= random(200,-200);
+		this.ypos = random(200,-200);
+		this.xspeed = 2.8; // Speed of the shape
+		this.yspeed = 2.2; // Speed of the shape
+		this.xdirection = 1; // Left or Right
+		this.ydirection = 1; // Top to Bottom
+		this.rad = (this.length + this.shape);
 	}
 
   draw() {
-		translate(this.x, this.y)
+		translate(this.xpos, this.ypos)
 		star(0, 0, this.shape, this.length, this.numLegs, this.seed);
 	}
 
 	move() {
-		this.x += random(10, -10) * 0.3
-		this.y += random(10, -10) * 0.3
+		this.xpos = this.xpos + this.xspeed * this.xdirection;
+		this.ypos = this.ypos + this.yspeed * this.ydirection;
+	
+		// Test to see if the shape exceeds the boundaries of the screen
+		// If it does, reverse its direction by multiplying by -1
+		if (this.xpos > width - this.rad || this.xpos < this.rad) {
+			this.xdirection *= -1;
+		}
+		if (this.ypos > height - this.rad || this.ypos < this.rad) {
+			this.ydirection *= -1;
+		}
 	}
 	
 	loadImage() {
@@ -160,4 +174,9 @@ class Starfish {
 		})
 	}
 
+}
+
+
+function mouseReleased() {
+	console.log(mouseX, mouseY)
 }
