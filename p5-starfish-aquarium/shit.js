@@ -117,12 +117,12 @@ class Starfish {
 		this.shape = data.shape
 		this.textureLink = data.textureLink
 		this.seed = data.seed
-		this.xpos= random(200,-200);
-		this.ypos = random(200,-200);
-		this.xspeed = random(0,1); // Speed of the shape
-		this.yspeed = random(0,1); // Speed of the shape
-		this.xdirection = random(0,1); // Left or Right
-		this.ydirection = random(0,1); // Top to Bottom
+		this.xpos= random(400,-400);
+		this.ypos = random(400,-400);
+		this.xspeed = random(0.3,1); // Speed of the shape
+		this.yspeed = random(0.3,1); // Speed of the shape
+		this.xdirection = Math.round(random(-1,1)); // Left or Right
+		this.ydirection = Math.round(random(-1,1)); // Top to Bottom
 		this.rad = (this.length + this.shape);
 	}
 
