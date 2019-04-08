@@ -2,6 +2,7 @@ var legSlider, shapeSlider, lengthSlider, rSlider, gSlider, bSlider, button
 
 let starfish = {}
 let img;
+let originalImg;
 let images = ["blank"];
 let ready = false;
 let lastSearch = ""
@@ -39,7 +40,8 @@ function setup() {
   button.mousePressed(upload);
 	
   rSlider = createSlider(0, 255, 100);
-  rSlider.position(130, 260);
+	rSlider.position(130, 260);
+	rSlider.mouseReleased(colorImage)
   gSlider = createSlider(0, 255, 100);
   gSlider.position(130, 290);
   bSlider = createSlider(0, 255, 100);
@@ -59,14 +61,35 @@ function setup() {
 function draw (){
 
 	if(ready) {
-		img = loadImage("https://cors-anywhere.herokuapp.com/" + images[0]);
+		img = loadImage("https://cors-anywhere.herokuapp.com/" + images[0], function() {
+			img.loadPixels()
+			originalImg = Uint8ClampedArray.from(img.pixels);
+
+			for (let x = 0; x < img.width; x++) {
+				for (let y = 0; y < img.height; y++) {
+	
+					let loc = (x + y * img.width) * 4;
+					let r, g, b;
+					r = img.pixels[loc];
+					g = img.pixels[loc+1]
+					b = img.pixels[loc+2]
+	
+					img.pixels[loc] = r + rSlider.value();
+					img.pixels[loc+1] = g + gSlider.value();
+					img.pixels[loc+2] = b +  bSlider.value();
+				 }
+			}
+			img.updatePixels();
+			
+		});
 		ready = false;
-  }
+	}
+	
 	background(225)
   textSize(20);
-  const r = rSlider.value();
-  const b = gSlider.value();
-  const g = bSlider.value();
+  // const r = rSlider.value();
+  // const b = gSlider.value();
+  // const g = bSlider.value();
 	// noStroke()
 
 	//reposition 0,0 to the center of the canvas
@@ -96,6 +119,9 @@ function draw (){
 		textureLink: images[0],
 		seed: random(-999, 999)
 	}
+
+
+
 
 
 }
@@ -164,4 +190,27 @@ function upload() {
 .catch(function(error) {
     console.error("Error adding document: ", error);
 });
+}
+
+
+function colorImage() {
+	img.loadPixels();
+	img.pixels = Uint8ClampedArray.from(originalImg)
+	console.log('af')
+	for (let x = 0; x < img.width; x++) {
+		for (let y = 0; y < img.height; y++) {
+
+			let loc = (x + y * img.width) * 4;
+			let r, g, b;
+			r = img.pixels[loc];
+			g = img.pixels[loc+1]
+			b = img.pixels[loc+2]
+
+			img.pixels[loc] = r + rSlider.value();
+			img.pixels[loc+1] = g + gSlider.value();
+			img.pixels[loc+2] = b +  bSlider.value();
+		 }
+	}
+	img.updatePixels();
+
 }
