@@ -1,5 +1,6 @@
 let bgImg;
 let aquarium = []
+let b = []
 
 // Initialize Firebase
 var config = {
@@ -20,6 +21,7 @@ function preload() {
 
 function setup() {
 	createCanvas(windowWidth, windowHeight, WEBGL);
+	setInterval(()=>{b.push(new Bubble())},100);
 	
 	// loadStarfish()
 
@@ -58,6 +60,18 @@ function draw() {
 		aquarium[i].draw()
 
 		pop()
+	}
+
+	/// Bubbles
+	for(let i = 0; i < b.length ;i++)
+	{
+      	translate(0,40);
+		
+		b[i].render(i);
+		if(b[i])
+		{	b[i].update();
+			b[i].delete(b,i);
+		}	
 	}
 
 	// star(0, 0, 400, 400, 6);
@@ -174,6 +188,66 @@ class Starfish {
 		})
 	}
 
+}
+
+class Bubble{
+
+	constructor(){
+		this.r=10;
+		this.x = random(((-width/2)+(this.r/2)),((width/2)-(this.r/2)));
+		this.y = random(50,100);
+		this.angle = random(60);
+		this.alpha = 90;
+	}
+	render(pos)
+	{
+		
+		for(let i  = 0;i< b.length;i++)
+		{
+			if(this != b[i])
+			{
+				let dis = dist(this.x,this.y,b[i].x,b[i].y)
+				let rs = this.r;
+				if(dis < rs)
+				{
+					if(random(1) < 0.5)
+					{
+						b.splice(i,1);
+					}
+					else
+					{
+						b.splice(pos,1);
+					}
+				}
+			}
+		}
+		
+		noStroke();
+		fill(110,222,255,this.alpha);
+		ellipse(this.x,this.y,this.r);
+		push();
+		fill(255,this.alpha);
+		noStroke();
+      /// Design inside the bubble
+		rect(this.x-(this.r/3),this.y-(this.r/3),(this.r/3)/2,(this.r/3));
+		rect(this.x-(this.r/3),this.y-(this.r/3),(this.r/3),(this.r/3)/2);
+		pop();
+	}
+	update()
+	{
+		this.alpha -= 0.3;
+		let s = sin(this.angle);
+		this.x = map(s,-1,1,(-width/2)+(this.r/2),(width/2)-(this.r/2));
+		this.angle += 0.001;
+		this.y -= random(0.5,5);
+	}
+	delete(b,i)
+	{
+		if(b[i].alpha < 0)
+		{
+			b.splice(i,1);
+		}
+	}
 }
 
 
