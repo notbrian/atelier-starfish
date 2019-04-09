@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1> P5.js Starfish Generator</h1>
+    <!-- <h1> P5.js Starfish Generator</h1> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
@@ -27,7 +27,7 @@
         }
 
         input {
-            width: 15rem;
+            /* width: 15rem; */
             border: 3px solid black;
             display: block;
             margin-left: auto;
@@ -38,6 +38,35 @@
             font-size: 1.25rem;
             color: grey;
         }
+        body {
+            margin: 0;
+        }
+
+        #grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        #atrributes {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr 1fr;
+        }
+
+        .slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
     </style>
 </body>
 

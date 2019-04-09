@@ -26,44 +26,72 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(windowWidth, windowHeight, WEBGL);
+	createCanvas(windowWidth, windowWidth, WEBGL);
 	strokeWeight(5);
 	// strokeFill(0);
+
+
+	createDiv(`<div id="attributes"></div>
+	<div id="texture"></div>
+	<div id="color"></div>`).id("grid")
+
+
+
+	createP('Physical Attributes').parent("attributes")
+
 	legSlider = createSlider(5, 15, random(5, 8));
-	legSlider.position(900, 260);
+	// legSlider.position(900, 260);
+	legSlider.parent("attributes")
+
 	shapeSlider = createSlider(50, 100, random(50, 100));
-	shapeSlider.position(900, 290);
+	// shapeSlider.position(900, 290);
+	shapeSlider.parent("attributes")
+
 	lengthSlider = createSlider(150, 250, random(150, 250));
-	lengthSlider.position(900, 320);
-	button = createButton('Send to Aquarium');
-	button.position(900, 350);
-	button.mousePressed(upload);
+	// lengthSlider.position(900, 320);
+	lengthSlider.parent("attributes")
+
+
+
+
+	createP('Starfish Colour').parent("color")
+
 
 	rSlider = createSlider(0, 255, 100);
-	rSlider.position(130, 260);
+	// rSlider.position(130, 260);
+	rSlider.parent("color")
 	rSlider.mouseReleased(sliderHandler)
 
 	gSlider = createSlider(0, 255, 100);
-	gSlider.position(130, 290);
+	// gSlider.position(130, 290);
+	gSlider.parent("color")
 	gSlider.mouseReleased(sliderHandler)
 
 	bSlider = createSlider(0, 255, 100);
-	bSlider.position(130, 320);
+	// bSlider.position(130, 320);
+	bSlider.parent("color")
 	bSlider.mouseReleased(sliderHandler)
 
+	button = createButton('Send to Aquarium');
+	// button.position(900, 350);
+	button.parent("color")
+	button.mousePressed(upload);
+
+
+	createP('Search for Texture').parent("texture")
+
 	searchInput = createInput();
-	searchInput.position(125, 400);
+	// searchInput.position(125, 400);
+	searchInput.parent("texture")
 	searchInput.input(searchHandler)
 
 
-	createP('Starfish Colour').position(130, 210);
-	createP('Search for Texture').position(130, 350);
-	createP('Physical Attributes').position(900, 210);
 
 
 }
 
 function draw() {
+	scale(1.2)
 
 	if (ready) {
 		imageLoad(0);
