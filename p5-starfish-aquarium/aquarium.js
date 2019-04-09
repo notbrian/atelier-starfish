@@ -131,7 +131,7 @@ class Starfish {
 		this.shape = data.shape
 		this.textureLink = data.textureLink
 		this.seed = data.seed
-		this.xpos= random(700,-00);
+		this.xpos= random(700,-700);
 		this.ypos = random(700,-700);
 		this.xspeed = random(0.3,1); // Speed of the shape
 		this.yspeed = random(0.3,1); // Speed of the shape
