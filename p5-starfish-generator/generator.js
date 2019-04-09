@@ -23,7 +23,7 @@ var db = firebase.firestore();
 
 
 function preload() {
-	img = loadImage('meme.png', function () {
+	img = loadImage('starfish.jpg', function () {
 		img.loadPixels();
 		originalImg = Uint8ClampedArray.from(img.pixels);
 	});
@@ -33,7 +33,7 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(windowWidth, windowWidth, WEBGL);
+	createCanvas(windowWidth, windowWidth/2, WEBGL);
 	strokeWeight(5);
 	// strokeFill(0);
 

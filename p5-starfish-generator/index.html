@@ -27,8 +27,7 @@
         }
 
         input {
-            /* width: 15rem; */
-            border: 3px solid black;
+            width: 15rem;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -36,26 +35,37 @@
 
         p {
             font-size: 1.25rem;
-            color: grey;
         }
 
         body {
             margin: 0;
+            background: #5fcacc
         }
 
         #grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-
+            background: #04c7cc; /* Old browsers */
+background: -moz-linear-gradient(top, #04c7cc 0%, #5fcacc 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #04c7cc 0%,#5fcacc 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #04c7cc 0%,#5fcacc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#04c7cc', endColorstr='#5fcacc',GradientType=0 ); /* IE6-9 */
         }
 
-        #grid div{
-            display: grid; 
+        #grid div {
+            display: grid;
             grid-auto-rows: 1fr;
         }
 
         #grid #texture {
             grid-row: span 1 3;
+            grid-row-gap: 0;
+        }
+
+        #grid p {
+            margin-bottom: 0;
+            color: white;
+
         }
 
 
@@ -76,7 +86,7 @@
             -webkit-transition: .2s;
             /* 0.2 seconds transition on hover */
             transition: opacity .2s;
-            border: 1.5px grey solid;
+            border: 1.5px white solid;
         }
 
         .slider::-webkit-slider-thumb {
@@ -87,7 +97,7 @@
             /* Set a specific slider handle width */
             height: 25px;
             /* Slider handle height */
-            background: #4CAF50;
+            background: #f30067;
             /* Green background */
             cursor: pointer;
             /* Cursor on hover */
@@ -98,32 +108,32 @@
             /* Set a specific slider handle width */
             height: 25px;
             /* Slider handle height */
-            background: #4CAF50;
+            background: #f30067;
             /* Green background */
             cursor: pointer;
             /* Cursor on hover */
         }
-    
-        #red::-webkit-slider-thumb{
+
+        #red::-webkit-slider-thumb {
             background: red;
         }
 
-        #green::-webkit-slider-thumb{
+        #green::-webkit-slider-thumb {
             background: green;
         }
 
-        #blue::-webkit-slider-thumb{
+        #blue::-webkit-slider-thumb {
             background: blue;
         }
 
-        .send{
+        .send {
             margin: 20px;
-            border: 2px solid black;
-            background-color:  rgb(166, 243, 168);
+            border: 2px solid white;
+            background-color: rgb(166, 243, 168);
             font-size: 1.5rem;
         }
 
-        .textureInput{
+        .textureInput {
             height: 20%
         }
     </style>
