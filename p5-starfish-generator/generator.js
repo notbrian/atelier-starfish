@@ -5,7 +5,8 @@ let img;
 let originalImg;
 let images = ["blank"];
 let ready = false;
-let lastSearch = ""
+let lastSearch = "";
+let bgImg;
 
 
 // Initialize Firebase
@@ -22,7 +23,13 @@ var db = firebase.firestore();
 
 
 function preload() {
-	img = loadImage('meme.png');
+	img = loadImage('meme.png', function () {
+		img.loadPixels();
+		originalImg = Uint8ClampedArray.from(img.pixels);
+	});
+
+	bgImg = loadImage('ocean.png');
+
 }
 
 function setup() {
@@ -39,17 +46,21 @@ function setup() {
 
 	createP('Physical Attributes').parent("attributes")
 
+	createP('Number of Legs').parent("attributes")
+
 	legSlider = createSlider(5, 15, random(5, 8));
 	// legSlider.position(900, 260);
-	legSlider.parent("attributes")
+	legSlider.parent("attributes").class("slider")
 
+	createP('Inner Radius').parent("attributes")
 	shapeSlider = createSlider(50, 100, random(50, 100));
 	// shapeSlider.position(900, 290);
-	shapeSlider.parent("attributes")
+	shapeSlider.parent("attributes").class("slider")
 
+	createP('Outer Radius').parent("attributes")
 	lengthSlider = createSlider(150, 250, random(150, 250));
 	// lengthSlider.position(900, 320);
-	lengthSlider.parent("attributes")
+	lengthSlider.parent("attributes").class("slider")
 
 
 
@@ -57,40 +68,52 @@ function setup() {
 	createP('Starfish Colour').parent("color")
 
 
-	rSlider = createSlider(0, 255, 100);
+	createP('Red').parent("color")
+	rSlider = createSlider(0, 255, 0);
 	// rSlider.position(130, 260);
-	rSlider.parent("color")
+	rSlider.parent("color").class("slider").id("red")
 	rSlider.mouseReleased(sliderHandler)
+	rSlider.touchEnded(sliderHandler)
 
-	gSlider = createSlider(0, 255, 100);
+	createP('Green').parent("color")
+	gSlider = createSlider(0, 255, 0);
 	// gSlider.position(130, 290);
-	gSlider.parent("color")
+	gSlider.parent("color").class("slider").id("green")
 	gSlider.mouseReleased(sliderHandler)
+	gSlider.touchEnded(sliderHandler)
 
-	bSlider = createSlider(0, 255, 100);
+	createP('Blue').parent("color")
+	bSlider = createSlider(0, 255, 0);
 	// bSlider.position(130, 320);
-	bSlider.parent("color")
+	bSlider.parent("color").class("slider").id("blue")
 	bSlider.mouseReleased(sliderHandler)
-
-	button = createButton('Send to Aquarium');
-	// button.position(900, 350);
-	button.parent("color")
-	button.mousePressed(upload);
+	bSlider.touchEnded(sliderHandler)
 
 
-	createP('Search for Texture').parent("texture")
+
+	createP('Search for Texture <br> (Anything you want!)').parent("texture")
 
 	searchInput = createInput();
 	// searchInput.position(125, 400);
 	searchInput.parent("texture")
 	searchInput.input(searchHandler)
+	searchInput.class("textureInput")
 
+	button = createButton('Send to Aquarium');
+	// button.position(900, 350);
+	button.parent("texture")
+	button.mousePressed(upload);
+	button.class("send")
 
 
 
 }
 
 function draw() {
+	textureMode(NORMAL)
+	fill(255)
+	texture(bgImg);
+	plane(width, height, 50, 50);
 	scale(1.2)
 
 	if (ready) {
@@ -98,8 +121,6 @@ function draw() {
 		ready = false;
 	}
 
-	background(225)
-	textSize(20);
 	// const r = rSlider.value();
 	// const b = gSlider.value();
 	// const g = bSlider.value();
@@ -134,9 +155,6 @@ function draw() {
 	}
 
 
-
-
-
 }
 
 function imageLoad(index) {
@@ -147,7 +165,7 @@ function imageLoad(index) {
 	}, function (err) {
 		console.log(err)
 		console.log("loading next image...")
-		if(index > 3) {
+		if (index > 3) {
 			img = loadImage('meme.png');
 			return;
 		}
