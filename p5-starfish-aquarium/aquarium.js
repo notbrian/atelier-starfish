@@ -133,16 +133,16 @@ class Starfish {
 		this.seed = data.seed
 		this.xpos= random(700,-700);
 		this.ypos = random(700,-700);
-		this.xspeed = random(0.3,1); // Speed of the shape
-		this.yspeed = random(0.3,1); // Speed of the shape
-		this.xdirection = Math.round(random(-1,1)); // Left or Right
-		this.ydirection = Math.round(random(-1,1)); // Top to Bottom
+		this.xspeed = random(0.2,1); // Speed of the shape
+		this.yspeed = random(0.2,1); // Speed of the shape
+		this.xdirection = (random(-1,1).toFixed(2)); // Left or Right
+		this.ydirection = (random(-1,1).toFixed(2)); // Top to Bottom
 		this.rad = (this.length + this.shape);
 	}
 
   draw() {
 		translate(this.xpos, this.ypos)
-		rotate(frameCount * 0.001 )
+		rotate(frameCount * this.seed/1000000 )
 		star(0, 0, this.shape, this.length, this.numLegs, this.seed);
 	}
 
