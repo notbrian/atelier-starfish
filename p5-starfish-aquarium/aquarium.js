@@ -50,7 +50,7 @@ function draw() {
 	for (let i = 0; i < aquarium.length; i++) {
 		push()
 		scale(0.5)
-
+		
 		if(aquarium[i].image === undefined) {
 			texture(bgImg)
 		} else {
@@ -131,8 +131,8 @@ class Starfish {
 		this.shape = data.shape
 		this.textureLink = data.textureLink
 		this.seed = data.seed
-		this.xpos= random(400,-400);
-		this.ypos = random(400,-400);
+		this.xpos= random(700,-700);
+		this.ypos = random(700,-700);
 		this.xspeed = random(0.3,1); // Speed of the shape
 		this.yspeed = random(0.3,1); // Speed of the shape
 		this.xdirection = Math.round(random(-1,1)); // Left or Right
@@ -142,6 +142,7 @@ class Starfish {
 
   draw() {
 		translate(this.xpos, this.ypos)
+		rotate(frameCount * 0.001 )
 		star(0, 0, this.shape, this.length, this.numLegs, this.seed);
 	}
 
