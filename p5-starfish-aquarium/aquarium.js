@@ -63,16 +63,16 @@ function draw() {
 	}
 
 	/// Bubbles
-	// for(let i = 0; i < b.length ;i++)
-	// {
-  //     	translate(0,40);
+	for(let i = 0; i < b.length ;i++)
+	{
+      	translate(0,40);
 		
-	// 	b[i].render(i);
-	// 	if(b[i])
-	// 	{	b[i].update();
-	// 		b[i].delete(b,i);
-	// 	}	
-	// }
+		b[i].render(i);
+		if(b[i])
+		{	b[i].update();
+			b[i].delete(b,i);
+		}	
+	}
 
 	// star(0, 0, 400, 400, 6);
 
